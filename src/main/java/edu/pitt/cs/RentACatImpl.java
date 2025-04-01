@@ -19,6 +19,26 @@ public class RentACatImpl implements RentACat {
 
 	public boolean returnCat(int id) {
 		// TODO: Fill in
+		if (cats == null || cats.isEmpty()) {
+			System.out.println("There are no cats to rent.\n");
+			return false;
+		}
+	
+		Cat selectedCat = findCatById(id);
+	
+		if (selectedCat == null) {
+			System.out.println("That cat does not exist.\n");
+			return false;
+		}
+	
+		if (selectedCat.getRented()) {
+			selectedCat.returnCat();  
+			System.out.println("Welcome back, " + selectedCat.getName() + "!");
+			return true;
+		} else {
+            System.out.println(selectedCat.getName() + " is already here!");
+        }
+	
 		return false;
 	}
 
@@ -34,7 +54,37 @@ public class RentACatImpl implements RentACat {
 
 	public boolean rentCat(int id) {
 		// TODO: Fill in
+		if (cats == null || cats.isEmpty()) {
+			System.out.println("There are no cats to rent.\n");
+			return false;
+		}
+	
+		// Find cat by ID instead of using list index
+		Cat selectedCat = findCatById(id);
+	
+		if (selectedCat == null) {
+			System.out.println("That cat does not exist.\n");
+			return false;
+		}
+	
+		if (!selectedCat.getRented()) {
+			selectedCat.rentCat();  // ✅ Now it actually rents the cat
+			System.out.println(selectedCat.getName() + " has been rented.");
+			return true;
+		} else {
+			System.out.println("Sorry, " + selectedCat.getName() + " is not here!");
+		}
+	
 		return false;
+	}
+
+	private Cat findCatById(int id) {
+		for (Cat cat : cats) {
+			if (cat.getId() == id) {
+				return cat;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -48,7 +98,31 @@ public class RentACatImpl implements RentACat {
 
 	public boolean renameCat(int id, String name) {
 		// TODO: Fill in
-		return false;
+		if(cats == null || cats.isEmpty()) {
+			System.out.println("Invalid cat ID.\n");
+			return false;
+		}
+
+		if (id < 0 || id >= cats.size()) {
+			System.out.println("That cat does not exist.\n");
+			return false;
+		}
+
+		Cat selectedCat = findCatById(id);
+
+		//System.out.println("name " + name);
+		
+
+		if(selectedCat == null) {
+			System.out.println("That cat does not exist.\n");
+			return false;
+		}
+
+		System.out.println("selected name " + selectedCat.getName());
+
+		selectedCat.renameCat(name);
+
+		return true;
 	}
 
 	/**
@@ -63,7 +137,21 @@ public class RentACatImpl implements RentACat {
 
 	public String listCats() {
 		// TODO: Fill in
-		return "WRITE CODE FOR THIS";
+		if(cats == null) {
+            System.out.println("There are no cats to list.\n");
+            return "";
+        }
+
+        StringBuilder catList = new StringBuilder();
+        int i = 0;
+        for(Cat c : cats) {
+
+            if(c.getRented() == false) {
+                catList.append(c.toString()).append("\n");
+            }
+        }
+
+        return catList.toString();
 	}
 
 	/**
